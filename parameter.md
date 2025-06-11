@@ -1,58 +1,58 @@
-# Parameter der Hauptroutine zur Berechnung der Vorabpauschale und der Bemessungsgrundlage
+# Parameters of the Main Routine for Calculating the Vorabpauschale and the Assessment Base
 
-Die Routine `berechne_vorabpauschale_und_bemessungsgrundlage` befindet sich in `vorabutil.py`.
+The routine `berechne_vorabpauschale_und_bemessungsgrundlage` is located in `vorabutil.py`.
 
-## Einganswerte
+## Input Values
 
-Die Routine wird mit zwei Parametern aufgerufen:
+The routine is called with two parameters:
 
- * `para`: ein Dictionary mit den Werten des Steuerfalls
- * `basiszinsen_feld`: ein Dictionary mit den Basiszinsen für die einzelnen Jahre
+ * `para`: a dictionary with the values of the tax case
+ * `basiszinsen_feld`: a dictionary with the base interest rates for the individual years
 
 ### basiszinsen_feld
 
 Dictionary
 
- * Schlüssel: Integer, Jahreszahl (z,B. 2019)
- * Wert: Float, Prozentwert (z.B. 0,52 - entsprechend 0,52%)
+ * Key: Integer, year number (e.g. 2019)
+ * Value: Float, percentage value (e.g. 0.52 - corresponding to 0.52%)
 
-### Steuerfall Eingabewerte
+### Tax Case Input Values
 
-Die Schlüsselnamen in diesem Dictionary sind (in `vorabutil.py`) als Konstanten definiert (durchgehend in Großbuchstaben).
+The key names in this dictionary are defined as constants (in capital letters throughout) in `vorabutil.py`.
 
-Sie entsprechen den Schlüsselnamen in den INI-Dateien (dort sind sie jedoch durchgehend klein geschrieben).
+They correspond to the key names in the INI files (however, they are written in lowercase throughout there).
 
 
-| Konstante                  | wann
+| Constant                   | When
 | -------------------------- | ---------------
-| ABRECHNUNGSJAHR            | immer
-| KAUFDATUM                  | ab dem Kauf
-| KAUFKURS                   | ab dem Kauf
-| ANZAHL                     | ab dem Kauf
-| FREISTELLUNGSSATZ          | ab dem Kauf
-| KURS_JAHRESANFANG          | beim Halten
-| KURS_JAHRESENDE            | beim Halten
-| AUSSCHUETTUNGEN_IM_JAHR    | beim Halten, beim Verkauf
-| VERKAUFSDATUM              | beim Verkauf
-| VERKAUFSKURS               | beim Verkauf
-| SUMME_ALTE_VORABPAUSCHALEN | beim Verkauf
+| ABRECHNUNGSJAHR            | always
+| KAUFDATUM                  | from purchase
+| KAUFKURS                   | from purchase
+| ANZAHL                     | from purchase
+| FREISTELLUNGSSATZ          | from purchase
+| KURS_JAHRESANFANG          | when holding
+| KURS_JAHRESENDE            | when holding
+| AUSSCHUETTUNGEN_IM_JAHR    | when holding, when selling
+| VERKAUFSDATUM              | when selling
+| VERKAUFSKURS               | when selling
+| SUMME_ALTE_VORABPAUSCHALEN | when selling
 
-### Ergebnisse
+### Results
 
-Auch diese Schlüssel sind als Konstanten definiert.
+These keys are also defined as constants.
 
-| Konstante                  | wann
+| Constant                   | When
 | -------------------------- | ---------------
-| VORABPAUSCHALE             | immer
-| BEMESSUNGSGRUNDLAGE        | immer
-| BASISERTRAG                | beim Halten
-| WERTSTEIGERUNG_JAHR        | beim Halten
-| WERTSTEIGERUNG_GESAMT      | beim Verkauf
-| UNTERJAHR_FAKTOR           | im Jahr des Kaufs
-| FEHLERHINWEIS              | bei besonderen Situationen
+| VORABPAUSCHALE             | always
+| BEMESSUNGSGRUNDLAGE        | always
+| BASISERTRAG                | when holding
+| WERTSTEIGERUNG_JAHR        | when holding
+| WERTSTEIGERUNG_GESAMT      | when selling
+| UNTERJAHR_FAKTOR           | in the year of purchase
+| FEHLERHINWEIS              | in special situations
 
 #### FEHLERHINWEIS
 
-Eine der erwähnten besonderen Situationen auf der mit diesem Eintrag hingewiesen wird, ist die Schätzung der Vorabsteuer *während* des Abrechnungsjahrs (siehe auch [inidateien.md](inidateien.md)).
+One of the mentioned special situations to which this entry points is the estimation of the advance tax *during* the accounting year (see also [inidateien.md](inidateien.md)).
 
-Im Normalfall hat das Ergebnis der Routine keinen Eintrag FEHLERHINWEIS.
+Normally, the result of the routine has no FEHLERHINWEIS entry.

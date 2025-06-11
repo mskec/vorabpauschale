@@ -1,149 +1,149 @@
-# Wichtiger Hinweis
+# Important Notice
 
-> Ich bin kein Steuerberater. Alle Ergebnisse dieser Routine sind unverbindlich und ohne Gewähr. Eine Haftung ist ausgeschlossen. Trotzdem bin ich für Hinweise auf Fehler dankbar.
+> I am not a tax advisor. All results of this routine are non-binding and without guarantee. Liability is excluded. Nevertheless, I am grateful for hints about errors.
 
-Diese Dokument beschreibt die Grundlagen des Programms und die einzelnen Parameter der Routine `berechne_vorabpauschale_und_bemessungsgrundlage` in `vorabutil.py`.
+This document describes the fundamentals of the program and the individual parameters of the routine `berechne_vorabpauschale_und_bemessungsgrundlage` in `vorabutil.py`.
 
-Es berechnet die Vorabpauschale und die Bemessungsgrundlage für Privatanleger für Fonds und ETF nach dem Investionssteuergesetz 2018.
+It calculates the Vorabpauschale and the assessment base for private investors for funds and ETFs according to the Investment Tax Act 2018.
 
-# Definitionen
+# Definitions
 
-## Grunddaten
+## Basic Data
 
-### Abrechnungsjahr
+### Accounting Year
 
-Jahr für das die Abrechnung erfolgt.
+Year for which the accounting is done.
 
-Zusammen mit dem `Kaufdatum` und dem `Verkaufsdatum` wird bestimmt:
+Together with the `Purchase Date` and the `Sale Date`, it determines:
 
-* ob die Anteile im Abrechnungsjahr gekauft wurden
-* ob die Anteile im Abrechnungsjahr verkauft wurden
-* ob die Anteile über das Abrechnungsjahr hinaus gehalten wurden
-* ob der Anleger die Anteile im Abrechnungsjahr überhaupt besessen hat
+* whether the shares were bought in the accounting year
+* whether the shares were sold in the accounting year
+* whether the shares were held beyond the accounting year
+* whether the investor owned the shares at all in the accounting year
 
-### Anzahl
+### Quantity
 
-Anzahl der Anteile an einem Fonds/ETF. Der Wert berechnet sich aus der Multiplikation
-der Anzahl mit dem jeweiligen Kurs.
+Number of shares in a fund/ETF. The value is calculated from the multiplication
+of the quantity with the respective price.
 
-### Kaufdatum
+### Purchase Date
 
-Datum zu dem die Anteile gekauft wurden.
+Date on which the shares were purchased.
 
-### Kaufkurs
+### Purchase Price
 
-Kurs zu dem die Anteile gekauft wurden
+Price at which the shares were purchased
 
-### Verkaufsdatum
+### Sale Date
 
-Datum zu dem die Anteile vergekauft wurden.
+Date on which the shares were sold.
 
-### Verkaufskurs
+### Sale Price
 
-Kurs zu dem die Anteile verkauft wurden
+Price at which the shares were sold
 
-### Kurs am Jahresanfang
+### Price at Beginning of Year
 
-Kurs eines Anteils zu Beginn des Jahres = letzter Kurs des Vorjahres
+Price of a share at the beginning of the year = last price of the previous year
 
-### Kurs zum Jahresende
+### Price at End of Year
 
-Kurs eines Anteils am Ende des Jahres = letzter Kurs im Jahr
+Price of a share at the end of the year = last price in the year
 
-### Ausschüttungen im Jahr
+### Distributions in the Year
 
-Im Abrechnungsjahr erhaltene Ausschüttungen des Fonds
+Distributions of the fund received in the accounting year
 
-### Basiszins
+### Base Interest Rate
 
-Wird am Beginn des Jahres vom Bundesfinanzministerium festgelegt.
-Angegeben wird der Zinssatz in Prozent.
-(Hinterlegt in `basis.ini`)
+Set at the beginning of the year by the Federal Ministry of Finance.
+The interest rate is given in percent.
+(Stored in `basis.ini`)
 
-### Anzuwendender Steuersatz
+### Applicable Tax Rate
 
-Dieser Wert in `basis.ini` bezieht sich auf die anwendbare Abgeltungssteuer.
-Zurzeit (2019) sind das maximal 25% + 5,5% Solidaritätszuschlag:
+This value in `basis.ini` refers to the applicable withholding tax.
+Currently (2019) this is a maximum of 25% + 5.5% solidarity surcharge:
 
-25% * (1 + 5,5%) = 26,375%
+25% * (1 + 5.5%) = 26.375%
 
-Falls Sie zusätzlich Kirchensteuer bezahlen oder der eigene Einkommenssteuersatz
-unter 25% beträgt, können Sie hier auch angepasste Werte eintragen.
+If you additionally pay church tax or your own income tax rate
+is below 25%, you can also enter adjusted values here.
 
-### Teilfreistellung
+### Partial Exemption
 
-Die Teilfreistellung ist ein Prozentsatz und hängt von der Art des Fonds ab.
-Für Privatanlager sind das:
+The partial exemption is a percentage and depends on the type of fund.
+For private investors these are:
 
-| Fondstyp    | Aktienquote | Teilfreistellung |
-| ----------- |:-----------:|:----------------:|
-| Aktienfonds |    ≥ 51%    | 30%              |
-| Mischfonds  |    ≥ 25%    | 15%              |
-| Sonstige    |    < 25%    | 0%               |
+| Fund Type     | Equity Ratio | Partial Exemption |
+| ------------- |:------------:|:-----------------:|
+| Equity Funds  |    ≥ 51%     | 30%               |
+| Mixed Funds   |    ≥ 25%     | 15%               |
+| Others        |    < 25%     | 0%                |
 
-### Summe alte Vorabpauschalen
+### Sum of Old Vorabpauschalen
 
-Summe der Vorabpauschalen aus früheren Jahren, die bereits versteuert wurden.
+Sum of the Vorabpauschalen from previous years that have already been taxed.
 
-## Abgeleitete Werte
+## Derived Values
 
-### Basisertrag
+### Base Return
 
-`Basisertrag = Kurs zum Jahresanfang x Anzahl x Basiszins x 0,7`
-
-
-### Wertentwicklung
-
-`(Kurs zum Jahresende - Kurs am Jahresanfang) * Anzahl`
+`Base Return = Price at Beginning of Year x Quantity x Base Interest Rate x 0.7`
 
 
-### Vorabbauschale
+### Value Development
 
-* Null im Jahr des Verkaufs
-* Anteilig im Jahr des Kaufs: n/12
-  * n = Anzahl der angefangenen Monate in dem das Papier gehalten wurde
-    * Kauf am 31.01. => n = 12
-    * Kauf am  1.02. => n = 11
-    * Kauf am 28.02. => n = 11
-    * Kauf am  1.03. => n = 10
-    * usw.
-* Null bei negativer Wertentwicklung im Abrechnungsjahr
-* Null, wenn Ausschüttungen im Jahr >= Basisertrag
-
-#### Falls Wertentwicklung + Ausschüttungen im Jahr >= Basisertrag
-
-`Vorabpauschale = Basisertrag - Ausschüttungen`
-
-* falls negativ, dann 0
-
-## Falls Wertentwicklung + Ausschüttungen im Jahr < Basisertrag
-
-`Vorabpauschale = Wertentwicklung`
-
-* eine negative Wertentwicklung wurde schon vorab aussortiert
-
-## Bemessungsgrundlage
-
-Der Wert, der zur Berechnung der Steuer herangezogen wird.
-
-### wenn der Fonds im Abrechnungsjahr *nicht* verkauft wurde
-
-`Bemessungsgrundlage = (Vorabpauschale + Ausschüttungen im Jahr) * (100% - Teilfreistellung)`
-
-### falls der Fonds im Abrechnungsjahr verkauft wurde
+`(Price at End of Year - Price at Beginning of Year) * Quantity`
 
 
-`Bemessungsgrundlage = ((Verkaufskurs - Kaufkurs) * Anzahl_Anteile + Ausschüttungen im Jahr - Summe alter Vorabpauschalen) * (100% - Teilfreistellung)`
+### Vorabpauschale
 
-## zu zahlende Steuer
+* Zero in the year of sale
+* Proportional in the year of purchase: n/12
+  * n = Number of started months in which the security was held
+    * Purchase on 31.01. => n = 12
+    * Purchase on  1.02. => n = 11
+    * Purchase on 28.02. => n = 11
+    * Purchase on  1.03. => n = 10
+    * etc.
+* Zero with negative value development in the accounting year
+* Zero if distributions in the year >= base return
 
-`(Summe aller Bemessungsgrundlagen ggf. abzüglich des Sparerfreibetrags) * anzuwendender Steuersatz`
+#### If value development + distributions in the year >= base return
+
+`Vorabpauschale = Base Return - Distributions`
+
+* if negative, then 0
+
+## If value development + distributions in the year < base return
+
+`Vorabpauschale = Value Development`
+
+* a negative value development has already been sorted out in advance
+
+## Assessment Base
+
+The value used to calculate the tax.
+
+### if the fund was *not* sold in the accounting year
+
+`Assessment Base = (Vorabpauschale + Distributions in the Year) * (100% - Partial Exemption)`
+
+### if the fund was sold in the accounting year
 
 
-# Offene Fragen
+`Assessment Base = ((Sale Price - Purchase Price) * Number_of_Shares + Distributions in the Year - Sum of Old Vorabpauschalen) * (100% - Partial Exemption)`
 
-* Was ist mit der Summe alter Vorabpauschalen, wenn für eine frühere Vorabpauschale wegen des Freibetrags keine Steuer gezahlt wurde?
-  * Antwort siehe (https://github.com/MStrecke/vorabpauschale/issues/1)
+## Tax to be Paid
+
+`(Sum of all assessment bases possibly minus the saver's allowance) * applicable tax rate`
+
+
+# Open Questions
+
+* What about the sum of old Vorabpauschalen if no tax was paid for a previous Vorabpauschale because of the allowance?
+  * Answer see (https://github.com/MStrecke/vorabpauschale/issues/1)
 
 # Links
 

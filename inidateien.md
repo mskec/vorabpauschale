@@ -1,14 +1,14 @@
-# Werte in den INI-Dateien
+# Values in the INI Files
 
-Das Programm verwendet die folgenden INI-Dateien:
+The program uses the following INI files:
 
- * `basis.ini`: enthält die Angaben zum Basiszins und anzuwendendem Kapitalertragssteuersatz
- * `test.ini`: enthält die Testfälle zum Testen des Algorithmus
- * eigene INI-Dateien mit Steuerfällen: der Name ist frei wählbar
+ * `basis.ini`: contains the information about the base interest rate and applicable capital gains tax rate
+ * `test.ini`: contains the test cases for testing the algorithm
+ * own INI files with tax cases: the name is freely selectable
 
 ## basis.ini
 
-Typischer Inhalt:
+Typical content:
 
 ```
 [basiszins]
@@ -20,22 +20,22 @@ Typischer Inhalt:
 steuersatz=26,375%
 ```
 
-Im Abschnitt *basiszins* befinden sich die von der Deutschen Bundesbank veröffentlichten Basiszinsen zur Berechnung der Vorabsteuer für die einzelnen Jahre.
+The *basiszins* section contains the base interest rates published by the German Federal Bank for calculating the advance tax for the individual years.
 
-Der Wert für 2016 wird nur für Testzwecke verwendet (siehe Testfälle von zendepot).
+The value for 2016 is only used for testing purposes (see test cases from zendepot).
 
-Unter *default* findet sich der anzuwendende Steuersatz. Maximal sind das im Augenblick 25% + 5,5% Solidaritätszuschlag
+Under *default* you will find the applicable tax rate. Currently, this is a maximum of 25% + 5.5% solidarity surcharge
 
-25% * (1 + 5,5%) = 26,375%
+25% * (1 + 5.5%) = 26.375%
 
-Falls Ihr persönlicher Steuersatz niedriger ist oder Sie Kirchensteuer bezahlen, kann der Wert angepasst werden.
+If your personal tax rate is lower or you pay church tax, the value can be adjusted.
 
 
-## test.ini und eigene INI-Dateien
+## test.ini and own INI files
 
-Diese Dateien enthalten die Steuerfälle, die vom Programm verarbeitet werden.
+These files contain the tax cases that are processed by the program.
 
-Hier ist ein typischer leerer Eintrag
+Here is a typical empty entry
 
 ```
 [XXXXXXXXXXXX]
@@ -55,51 +55,51 @@ bemerkung=
 warnung=
 ```
 
-Der Name des Abschnitts (in den eckigen Klammern) muss eindeutig und sollte aussagefähig sein, z.B. Jahr + ISIN. Er wird bei der Ausgabe der Ergebnisse angezeigt.
+The name of the section (in square brackets) must be unique and should be meaningful, e.g. year + ISIN. It is displayed when outputting the results.
 
-Welche Felder ausgefüllt sein müssen hängt davon ab, ob Sie den Fonds im Abrechnungsjahr verkauft (V) oder über den 31.12. gehalten (H) haben.
+Which fields must be filled in depends on whether you sold the fund in the accounting year (V) or held it beyond December 31 (H).
 
 
-| Schlüssel | benötigt | Inhalt |
-| --------- |:--------:| ------ |
-| abrechnungsjahr | immer | Jahr für das die Abrechnung erstellt werden soll |
-| freistellungssatz | immer | Freistellungssatz, je nach Art des Fonds (30%, 15%, 0%) |
-| kurs_jahresanfang | H | Kurs des Fonds zum Jahresanfang |
-| kurs_jahresende | H | Kurs des Fonds zum Jahresende |
-| anzahl | immer | Anzahl der Anteil -> Wert = Anzahl * Kurs |
-| kaufdatum | immer | Datum des Kaufs |
-| kaufkurs | V | Kurs zu dem der Anteil gekauft wurde |
-| verkaufsdatum | V | Datum an dem der Anteil verkauft wurde |
-| verkaufskurs | V | Kurs zu dem der Anteil verkauft wurde |
-| ausschuettungen_im_jahr | immer | Höhe der Ausschüttungen im Abrechnungsjahr, kann 0 sein |
-| summe_alte_vorabpauschalen | V | Summe der in den letzten Jahren gezahlten Vorabpauschalen für diese Tranche |
-| hinweis | - | Klartext ohne weitere Funktion |
-| bemerkung | - | Klartext ohne weitere Funktion |
-| vorabpauschale | Test | falls gesetzt → Testfall |
-| bemessungsgrundlage | Test | falls gesetzt → Testfall |
-| Warnung | Test | Hinweis, der *immer* in der Ausgabe angezeigt wird |
+| Key | Required | Content |
+| --- |:--------:| ------- |
+| abrechnungsjahr | always | Year for which the accounting should be created |
+| freistellungssatz | always | Exemption rate, depending on the type of fund (30%, 15%, 0%) |
+| kurs_jahresanfang | H | Price of the fund at the beginning of the year |
+| kurs_jahresende | H | Price of the fund at the end of the year |
+| anzahl | always | Number of shares -> Value = Number * Price |
+| kaufdatum | always | Date of purchase |
+| kaufkurs | V | Price at which the share was purchased |
+| verkaufsdatum | V | Date on which the share was sold |
+| verkaufskurs | V | Price at which the share was sold |
+| ausschuettungen_im_jahr | always | Amount of distributions in the accounting year, can be 0 |
+| summe_alte_vorabpauschalen | V | Sum of the Vorabpauschalen paid in recent years for this tranche |
+| hinweis | - | Plain text without further function |
+| bemerkung | - | Plain text without further function |
+| vorabpauschale | Test | if set → test case |
+| bemessungsgrundlage | Test | if set → test case |
+| Warnung | Test | Note that is *always* displayed in the output |
 
-Die ausführliche Definition der Parameter finden Sie in [grundlagen.md](grundlagen.md).
+The detailed definition of the parameters can be found in [grundlagen.md](grundlagen.md).
 
-## Wann muss ich was eintragen?
+## When do I need to enter what?
 
-### Kauf
+### Purchase
 
-Die folgenden Einträge *müssen* gesetzt werden:
+The following entries *must* be set:
 
  * kaufdatum
  * kaufkurs
  * anzahl
  * freistellungssatz
 
-Bereits jetzt *sollten* Sie eintragen, weil diese Werte verfügbar sind:
+You *should* already enter now, because these values are available:
 
  * abrechnungsjahr
  * kurs_jahresanfang
 
-### Verkauf
+### Sale
 
-Die folgenden Einträge *müssen* zusätzlich gesetzt werden:
+The following entries *must* additionally be set:
 
  * abrechnungsjahr
  * verkaufsdatum
@@ -107,38 +107,38 @@ Die folgenden Einträge *müssen* zusätzlich gesetzt werden:
  * ausschuettungen_im_jahr
  * summe_alte_vorabpauschalen
 
-### falls der Fonds während des Abrechnungsjahr nicht verkauft wurde
+### if the fund was not sold during the accounting year
 
  * abrechnungsjahr
  * kurs_jahresanfang
  * kurs_jahresende
  * ausschuettungen_im_jahr
 
-## Allgemein bei jeder Berechnung
+## Generally for every calculation
 
-Die folgenden Einträge *müssen* gesetzt sein:
+The following entries *must* be set:
 
  * abrechnungsjahr
  * ausschuettungen_im_jahr
 
-### Schätzung *während* des Abrechnungsjahrs
+### Estimation *during* the accounting year
 
-Während des Abrechnungsjahrs ist der Kurs zum Jahresende natürlich noch nicht bekannt.
+During the accounting year, the price at the end of the year is of course not yet known.
 
-Das Programm berechnet dann eine Schätzung auf der Grundlage von
+The program then calculates an estimate based on
 
  * abrechnungsjahr
  * kurs_jahresanfang
  * ausschuettungen_im_jahr
 
-Ein Hinweis, dass dies eine Schätzung ist, erscheint in der Info-Spalte
+A note that this is an estimate appears in the info column
 
 ## Tests
 
-Falls beim Schlüssel `vorabpauschale` oder `bemessungsgrundlage` ein Wert eingetragen ist, wird dieser Datensatz als Testfall betrachtet und diese Werte mit den berechneten Werten verglichen. Das Ergebnis des Tests erscheint in der Ausgabe. Ein erfolgreicher Vergleich erlaubt eine Abweichung um 3 Eurocent.
+If a value is entered for the key `vorabpauschale` or `bemessungsgrundlage`, this record is considered a test case and these values are compared with the calculated values. The result of the test appears in the output. A successful comparison allows for a deviation of 3 euro cents.
 
-## Warnung
+## Warning
 
-Der Schlüssel `warnung` dient dazu, einen Hinweis in der Liste der Ergebnisse anzuzeigen.
+The key `warnung` serves to display a note in the list of results.
 
-Zum Beispiel den Hinweis, dass die "Berechnung auf der Website wahrscheinlich fehlerhaft" ist.
+For example, the note that the "calculation on the website is probably incorrect".
